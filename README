@@ -1,0 +1,27 @@
+--developed on linux mint xfce--
+
+get required packages:
+sudo apt-get install postgresql libpq-dev python-setuptools
+
+install psycopg:
+sudo easy_install psycopg2
+
+get latest postgresql eve db dump
+(http://eve-search.com/thread/1428012/page/1#15)
+
+set up db user
+(sudo passwd postgres
+ --->postgrespass
+ su - postgres)
+
+make db, set user
+(createdb evedb
+ psql evedb
+ alter user postgres with password 'postgrespass'
+ \q)
+
+import data
+(psql evedb < inc100-pgsql-v2-unquoted-compatible.sql)
+
+--ISSUE:
+must be logged in as user postgres to open connection to db using psycopg2
