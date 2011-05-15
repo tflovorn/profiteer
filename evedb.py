@@ -97,11 +97,11 @@ class DB_Manager:
         """
         if not self.connected:
             raise IOError("Database connection not active")
-        if item_id in self.cache_market_group:
+        if market_group_id in self.cache_market_group:
             return self.cache_market_group[market_group_id]
         self._cur.execute(
             """SELECT marketgroupname, marketgroupid, parentgroupid 
-               FROM invtypematerials WHERE marketgroupid=%s""", 
+               FROM invmarketgroups WHERE marketgroupid=%s""", 
             (market_group_id,))
         market_group = self._cur.fetchone()
         if market_group is not None:
