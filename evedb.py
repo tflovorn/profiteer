@@ -28,8 +28,8 @@ class DB_Manager(object):
     def item_by_id(self, item_id):
         """Get an item by its id.
 
-        Return (typename, typeid, volume, marketgroupid) for item with given
-        id.  Returns None if no item exists with that typeid.
+        Return a dict of properties for item with given id.  Returns None if no
+        item exists with that typeid.
 
         """
         if not self.connected:
@@ -48,8 +48,8 @@ class DB_Manager(object):
     def item_by_name(self, item_name):
         """Get an item by its name.
 
-        Return (typename, typeid, volume, marketgroupid) for item with given
-        name.  Returns None if no item exists with that name.
+        Return a dict of properties for item with given name.  Returns None if 
+        no item exists with that name.
 
         """
         if not self.connected:
@@ -68,9 +68,8 @@ class DB_Manager(object):
     def materials(self, item_id):
         """Get the materials required to make an item by its id.
 
-        Return a list whose elements are (materialtypeid, quantity) for each
-        material required to make item_id.  Returns None if no item exists with
-        that item_id.
+        Return a list of dicts of properties for each material required to make
+        item_id.  Returns None if no item exists with that item_id.
 
         """
         if not self.connected:
@@ -91,9 +90,8 @@ class DB_Manager(object):
     def market_group(self, market_group_id):
         """Get the market group associated with the id.
 
-        Return (marketgroupname, marketgroupid, parentgroupid) for the 
-        specified market group.  Returns None if no item exists with that 
-        market group id.
+        Return a dict of properties for the specified market group.  Returns 
+        None if no item exists with that market group id.
 
         """
         if not self.connected:
