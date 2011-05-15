@@ -23,5 +23,10 @@ class KnownValueItems(unittest.TestCase):
         market_group = dbman.market_group(5)
         self.assertEqual(market_group, ("Standard Frigates", 5, 1361))
 
+    def test_market_group_with_NULL(self):
+        dbman = evedb.DB_Manager("evedb", "postgres", "postgrespass")
+        market_group = dbman.market_group(2)
+        self.assertEqual(market_group[2], None)
+
 if __name__ == "__main__":
     unittest.main()
