@@ -1,4 +1,4 @@
---developed on linux mint xfce--
+--developed on linux mint xfce, Python 2.7.1 --
 
 get required packages:
 sudo apt-get install postgresql libpq-dev python-setuptools

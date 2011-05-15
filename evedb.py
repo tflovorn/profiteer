@@ -1,6 +1,6 @@
 import psycopg2
 
-class DB_Manager:
+class DB_Manager(object):
     """Provides an interface into the EVE static data dump for extracting item
     construction information.
 
@@ -39,10 +39,10 @@ class DB_Manager:
         self._cur.execute(
             """SELECT typename, typeid, volume, marketgroupid FROM invtypes 
                WHERE typeid=%s""", (item_id,))
-        item = self._cur.fetchone()
+        item = _item_to_dict(self._cur.fetchone())
+        self.cache_item_by_id[item_id] = item
         if item is not None:
-            self.cache_item_by_id[item_id] = item
-            self.cache_item_by_name[item[0]] = item
+            self.cache_item_by_name[item["name"]] = item
         return item
 
     def item_by_name(self, item_name):
@@ -59,10 +59,10 @@ class DB_Manager:
         self._cur.execute(
             """SELECT typename, typeid, volume, marketgroupid FROM invtypes 
                WHERE typename=%s""", (item_name,))
-        item = self._cur.fetchone()
+        item = _item_to_dict(self._cur.fetchone())
+        self.cache_item_by_name[item_name] = item
         if item is not None:
-            self.cache_item_by_name[item_name] = item
-            self.cache_item_by_id[item[1]] = item
+            self.cache_item_by_id[item["id"]] = item
         return item
 
     def materials(self, item_id):
@@ -81,10 +81,11 @@ class DB_Manager:
             """SELECT typeid, materialtypeid, quantity FROM invtypematerials
                WHERE typeid=%s""", (item_id,))
         try:
-            material_list = self._cur.fetchall()
+            material_list = _material_dicts(self._cur.fetchall())
             self.cache_materials[item_id] = material_list
             return material_list
         except psycopg2.ProgrammingError:
+            self.cache_materials[item_id] = None
             return None
 
     def market_group(self, market_group_id):
@@ -103,7 +104,28 @@ class DB_Manager:
             """SELECT marketgroupname, marketgroupid, parentgroupid 
                FROM invmarketgroups WHERE marketgroupid=%s""", 
             (market_group_id,))
-        market_group = self._cur.fetchone()
-        if market_group is not None:
-            self.cache_market_group[market_group_id] = market_group
+        group_list = self._cur.fetchone()
+        if group_list is None:
+            market_group = None
+        else:
+            market_group = {"name": group_list[0], "id": group_list[1],
+                            "parent": group_list[2]}
+        self.cache_market_group[market_group_id] = market_group
         return market_group
+
+def _item_to_dict(item_list):
+    if item_list is None:
+        return None
+    item_dict = {"name": item_list[0], "id": item_list[1],
+                 "volume": item_list[2], "market_group": item_list[3]}
+    return item_dict
+
+def _material_dicts(material_list):
+    if material_list is None:
+        return None
+    material_list_with_dicts = []
+    for item in material_list:
+        item_dict = {"item_id": item[0], "material_id": item[1],
+                     "quantity": item[2]}
+        material_list_with_dicts.append(item_dict)
+    return material_list_with_dicts
