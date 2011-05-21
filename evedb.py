@@ -1,5 +1,8 @@
 import psycopg2
 
+def default_connect():
+    return DB_Manager("evedb", "postgres", "postgrespass")
+
 class DB_Manager(object):
     """Provides an interface into the EVE static data dump for extracting item
     construction information.

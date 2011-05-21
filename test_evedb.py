@@ -3,7 +3,7 @@ import evedb
 
 class KnownValueItems(unittest.TestCase):
     def setUp(self):
-        self.dbman = evedb.DB_Manager("evedb", "postgres", "postgrespass")
+        self.dbman = evedb.default_connect()
 
     def tearDown(self):
         self.dbman.close()

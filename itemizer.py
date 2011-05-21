@@ -1,6 +1,6 @@
 import evedb
 
-class Item_Builder(object):
+class Itemizer(object):
     def __init__(self):
         self.item_cache = {}
         self.market_group_cache = {}
@@ -8,12 +8,12 @@ class Item_Builder(object):
     def get_item(self, name):
         if name in self.item_cache:
             return self.item_cache["name"]
-        dbman = evedb.DB_Manager("evedb", "postgres", "postgrespass")
+        dbman = evedb.default_connect()
         item_data = dbman.item_by_name(name)
         if item_data is None:
             raise KeyError("Item with name %s not found" % name)
-        market_group = _market_group(dbman, item_data["market_group"])
-        materials = _materials(dbman, item_data["id"])
+        market_group = self._market_group(dbman, item_data["market_group"])
+        materials = self._materials(dbman, item_data["id"])
         dbman.close()
         item = Item(item_data["name"], item_data["volume"], market_group, 
                     materials)
@@ -22,7 +22,7 @@ class Item_Builder(object):
 
     def _get_item_by_id(self, dbman, item_id):
         item_data = dbman.item_by_id(item_id)
-        return get_item(item_data["name"])
+        return self.get_item(item_data["name"])
 
     def _market_group(self, dbman, group_id):
         if group_id in self.market_group_cache:
@@ -38,7 +38,7 @@ class Item_Builder(object):
     def _materials(self, dbman, item_id):
         '''Recursively calls get_item to build the material tree.'''
         material_data = dbman.materials(item_id)
-        if material_data is None:
+        if material_data == []:
             return None
         materials = []
         for material in material_data:
