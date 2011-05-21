@@ -24,7 +24,7 @@ class MarketGroup(unittest.TestCase):
     def test_cache(self):
         group1 = self.itemizer._market_group(self.dbman, 449)
         group2 = self.itemizer._market_group(self.dbman, 449)
-        self.assertEqual(group1, group2)
+        self.assertTrue(group1 is group2)
 
 class KnownItems(unittest.TestCase):
     def setUp(self):
@@ -52,6 +52,11 @@ class KnownItems(unittest.TestCase):
             item, quantity = rifter.materials[mat_name]
             self.assertEqual(item.name, mat_name)
             self.assertEqual(quantity, mat_quantity)
+
+    def test_cache(self):
+        item1 = self.itemizer.get_item("Rifter")
+        item2 = self.itemizer.get_item("Rifter")
+        self.assertTrue(item1 is item2)
             
 if __name__ == "__main__":
     unittest.main()

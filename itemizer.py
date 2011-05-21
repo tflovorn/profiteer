@@ -7,7 +7,7 @@ class Itemizer(object):
 
     def get_item(self, name):
         if name in self.item_cache:
-            return self.item_cache["name"]
+            return self.item_cache[name]
         dbman = evedb.default_connect()
         item_data = dbman.item_by_name(name)
         if item_data is None:
