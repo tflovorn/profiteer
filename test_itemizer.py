@@ -35,7 +35,7 @@ class KnownItems(unittest.TestCase):
         self.assertEqual(trit.name, "Tritanium")
         self.assertEqual(trit.volume, 0.01)
         self.assertEqual(trit.market_group, _mineral_group)
-        self.assertEqual(trit.materials, None)
+        self.assertEqual(trit.materials, [])
 
 if __name__ == "__main__":
     unittest.main()

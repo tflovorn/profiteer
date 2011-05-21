@@ -38,8 +38,6 @@ class Itemizer(object):
     def _materials(self, dbman, item_id):
         '''Recursively calls get_item to build the material tree.'''
         material_data = dbman.materials(item_id)
-        if material_data == []:
-            return None
         materials = []
         for material in material_data:
             materials.append(self._get_item_by_id(material["material_id"]),
