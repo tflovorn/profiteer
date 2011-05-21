@@ -1,8 +1,6 @@
 import unittest
 import evedb
 
-
-
 class KnownValueItems(unittest.TestCase):
     def setUp(self):
         self.dbman = evedb.DB_Manager("evedb", "postgres", "postgrespass")
@@ -49,7 +47,6 @@ class KnownValueItems(unittest.TestCase):
         """market_group gives the parent as None when it is NULL in the db"""
         market_group = self.dbman.market_group(2)
         self.assertEqual(market_group["parent"], None)
-
 
 if __name__ == "__main__":
     unittest.main()

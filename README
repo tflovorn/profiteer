@@ -25,3 +25,6 @@ import data
 
 --ISSUE:
 must be logged in as user postgres to open connection to db using psycopg2
+
+note that all market groups without a parent are shown in the eve market window.
+-starting from these allows determination of all market-visible items.
